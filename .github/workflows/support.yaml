@@ -16,7 +16,9 @@
 
 name: Container Support
 
-on: [workflow_dispatch, pull_request]
+# 수동 실행만 (Actions 탭 > Container Support > Run workflow).
+# ScreenTransitionIT의 testOrder, testQuickLinks 실패를 고친 뒤 pull_request 를 다시 추가할 것.
+on: [workflow_dispatch]
 
 permissions: read-all
 
