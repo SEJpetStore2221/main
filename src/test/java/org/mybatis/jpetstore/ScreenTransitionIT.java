@@ -107,7 +107,7 @@ class ScreenTransitionIT {
     $(By.cssSelector("#Catalog h2")).shouldBe(text("Shopping Cart"));
 
     // Add a item to the cart
-    $(By.cssSelector("#QuickLinks a:nth-of-type(5)")).click();
+    $(By.cssSelector("#QuickLinks a[href$='categoryId=BIRDS']")).click();
     $(By.linkText("AV-CB-01")).click();
     $(By.linkText("EST-18")).click();
     $(By.linkText("Add to Cart")).click();
@@ -376,24 +376,30 @@ class ScreenTransitionIT {
     $(By.linkText("Enter the Store")).click();
     $(By.id("WelcomeContent")).shouldBe(empty);
 
+    // Links are located by href, not position, so adding a QuickLink does not shift the others.
+    // Move to all items
+    $(By.cssSelector("#QuickLinks a[href$='/catalog/viewAllItems']")).click();
+    $(By.cssSelector("#Catalog h2")).shouldBe(text("All Products"));
+    $$(By.cssSelector("#Catalog a[href*='viewItem?itemId=']")).shouldHave(size(28));
+
     // Move to Fish category
-    $(By.cssSelector("#QuickLinks a:nth-of-type(1)")).click();
+    $(By.cssSelector("#QuickLinks a[href$='categoryId=FISH']")).click();
     $(By.cssSelector("#Catalog h2")).shouldBe(text("Fish"));
 
     // Move to Dogs category
-    $(By.cssSelector("#QuickLinks a:nth-of-type(2)")).click();
+    $(By.cssSelector("#QuickLinks a[href$='categoryId=DOGS']")).click();
     $(By.cssSelector("#Catalog h2")).shouldBe(text("Dogs"));
 
     // Move to Reptiles category
-    $(By.cssSelector("#QuickLinks a:nth-of-type(3)")).click();
+    $(By.cssSelector("#QuickLinks a[href$='categoryId=REPTILES']")).click();
     $(By.cssSelector("#Catalog h2")).shouldBe(text("Reptiles"));
 
     // Move to Cats category
-    $(By.cssSelector("#QuickLinks a:nth-of-type(4)")).click();
+    $(By.cssSelector("#QuickLinks a[href$='categoryId=CATS']")).click();
     $(By.cssSelector("#Catalog h2")).shouldBe(text("Cats"));
 
     // Move to Birds category
-    $(By.cssSelector("#QuickLinks a:nth-of-type(5)")).click();
+    $(By.cssSelector("#QuickLinks a[href$='categoryId=BIRDS']")).click();
     $(By.cssSelector("#Catalog h2")).shouldBe(text("Birds"));
   }
 
