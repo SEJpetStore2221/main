@@ -72,6 +72,8 @@
         </div>
 
         <div id="QuickLinks">
+            <a href="${pageContext.request.contextPath}/catalog/viewAllItems">All</a>
+            <img src="${pageContext.request.contextPath}/images/separator.gif" />
             <a href="${pageContext.request.contextPath}/catalog/viewCategory?categoryId=FISH"><img src="${pageContext.request.contextPath}/images/sm_fish.gif" /></a>
             <img src="${pageContext.request.contextPath}/images/separator.gif" />
             <a href="${pageContext.request.contextPath}/catalog/viewCategory?categoryId=DOGS"><img src="${pageContext.request.contextPath}/images/sm_dogs.gif" /></a>

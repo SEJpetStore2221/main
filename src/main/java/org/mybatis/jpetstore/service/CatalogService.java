@@ -140,6 +140,10 @@ public class CatalogService {
     return itemMapper.getItem(itemId);
   }
 
+  public List<Item> getAllItemList() {
+    return itemMapper.getAllItemList();
+  }
+
   /**
    * Is item in stock.
    *

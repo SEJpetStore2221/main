@@ -113,6 +113,13 @@ public class CatalogController {
     return "catalog/Item";
   }
 
+  @GetMapping("/viewAllItems")
+  public String viewAllItems(Model model) {
+    List<Item> itemList = catalogService.getAllItemList();
+    model.addAttribute("itemList", itemList);
+    return "catalog/AllItems";
+  }
+
   /**
    * Search products.
    *
