@@ -53,6 +53,8 @@ public interface ItemMapper {
    */
   List<Item> getItemListByProduct(String productId);
 
+  List<Item> getAllItemList();
+
   /**
    * Get item.
    *
