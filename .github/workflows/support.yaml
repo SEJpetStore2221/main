@@ -46,6 +46,9 @@ jobs:
           distribution: ${{ matrix.distribution }}
           java-version: 21
 
+      - name: Start PostgreSQL (pgvector)
+        run: docker compose up -d --wait db
+
       - name: Build, start, test, and stop with ${{ matrix.token }}
         shell: bash
         run: |
