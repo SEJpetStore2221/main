@@ -21,11 +21,14 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.testcontainers.postgresql.PostgreSQLContainer;
+import org.testcontainers.utility.DockerImageName;
 
 /**
  * The Class MapperTestContext.
@@ -41,9 +44,18 @@ public class MapperTestContext {
    */
   @Bean
   DataSource dataSource() {
-    return new EmbeddedDatabaseBuilder().generateUniqueName(true).setType(EmbeddedDatabaseType.HSQL)
-        .setScriptEncoding("UTF-8").ignoreFailedDrops(true).addScript("database/jpetstore-hsqldb-schema.sql")
-        .addScripts("database/jpetstore-hsqldb-dataload.sql").build();
+    // Same image and init scripts as docker-compose.yaml; Testcontainers removes the container after the run.
+    PostgreSQLContainer postgres = new PostgreSQLContainer(
+        DockerImageName.parse("pgvector/pgvector:pg17").asCompatibleSubstituteFor("postgres"));
+    postgres.start();
+    DriverManagerDataSource dataSource = new DriverManagerDataSource(postgres.getJdbcUrl(), postgres.getUsername(),
+        postgres.getPassword());
+    ResourceDatabasePopulator populator = new ResourceDatabasePopulator(
+        new ClassPathResource("database/01-jpetstore-schema.sql"),
+        new ClassPathResource("database/02-jpetstore-dataload.sql"));
+    populator.setSqlScriptEncoding("UTF-8");
+    populator.execute(dataSource);
+    return dataSource;
   }
 
   /**

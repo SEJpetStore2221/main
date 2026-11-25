@@ -14,13 +14,37 @@
 #    limitations under the License.
 #
 
-version: "3.9"
+# 로컬 개발용 PostgreSQL + pgvector
+#   DB만 실행:          docker compose up -d
+#   앱까지 컨테이너로:  docker compose --profile app up -d
+#   스키마/데이터 변경 반영(데이터 초기화): docker compose down -v 후 다시 up
+# src/main/resources/database/*.sql 은 볼륨이 비어 있을 때(최초 실행)만 파일명 순서대로 실행된다.
 
 services:
+  db:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_DB: jpetstore
+      POSTGRES_USER: jpetstore
+      POSTGRES_PASSWORD: jpetstore
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./src/main/resources/database:/docker-entrypoint-initdb.d:ro
+      - pgdata:/var/lib/postgresql/data
+
   jpetstore:
+    profiles: [app]
     container_name: jpetstore
     build:
       context: .
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/jpetstore
+    depends_on:
+      - db
     ports:
       - 8080:8080
     restart: always
+
+volumes:
+  pgdata:
