@@ -32,6 +32,12 @@ services:
     volumes:
       - ./src/main/resources/database:/docker-entrypoint-initdb.d:ro
       - pgdata:/var/lib/postgresql/data
+    # 초기화 SQL 실행 중에는 TCP를 열지 않으므로, 이 검사가 통과하면 스키마/데이터까지 준비된 상태
+    healthcheck:
+      test: ["CMD", "pg_isready", "-h", "127.0.0.1", "-U", "jpetstore", "-d", "jpetstore"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
 
   jpetstore:
     profiles: [app]
