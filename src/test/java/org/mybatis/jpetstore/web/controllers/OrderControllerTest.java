@@ -103,6 +103,9 @@ class OrderControllerTest {
 
     Cart cart = new Cart();
     when(session.getAttribute("cart")).thenReturn(cart);
+    // quiz already passed for this (empty) cart
+    when(session.getAttribute(QuizController.QUIZ_SESSION))
+        .thenReturn(new QuizController.QuizSession(List.of(), List.of()));
 
     String view = orderController.newOrderForm(session, model);
 
@@ -118,6 +121,23 @@ class OrderControllerTest {
   /**
    * List orders with auth returns order list.
    */
+  @Test
+  void newOrderFormWithoutPassedQuizRedirectsToQuiz() {
+    HttpSession session = mock(HttpSession.class);
+    Model model = new ExtendedModelMap();
+    org.mybatis.jpetstore.domain.Account account = new org.mybatis.jpetstore.domain.Account();
+    account.setUsername("j2ee");
+    AccountController.AccountSession accountSession = new AccountController.AccountSession(account, List.of(), true);
+    when(session.getAttribute("accountBean")).thenReturn(accountSession);
+    when(session.getAttribute("cart")).thenReturn(new Cart());
+    when(session.getAttribute(QuizController.QUIZ_SESSION)).thenReturn(null);
+
+    String view = orderController.newOrderForm(session, model);
+
+    assertThat(view).isEqualTo("redirect:/quiz");
+    assertThat(model.asMap()).doesNotContainKey("order");
+  }
+
   @Test
   void listOrdersWithAuthReturnsOrderList() {
     HttpSession session = mock(HttpSession.class);

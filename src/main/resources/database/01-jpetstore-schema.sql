@@ -166,3 +166,21 @@ CREATE TABLE sequence
     nextid             int          not null,
     constraint pk_sequence primary key (name)
 );
+
+-- Pre-purchase quiz (10 questions per product, answer = 1~4)
+create table quiz (
+    quizid int not null,
+    productid varchar(10) not null,
+    question varchar(255) not null,
+    choice1 varchar(255) not null,
+    choice2 varchar(255) not null,
+    choice3 varchar(255) not null,
+    choice4 varchar(255) not null,
+    answer int not null,
+    explanation varchar(500) not null,
+    constraint pk_quiz primary key (quizid),
+        constraint fk_quiz_1 foreign key (productid)
+        references product (productid)
+);
+
+create index quizProd on quiz (productid);

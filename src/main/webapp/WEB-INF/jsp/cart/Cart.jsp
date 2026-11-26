@@ -66,7 +66,7 @@
 
         </form>
         <c:if test="${cart.numberOfItems > 0}">
-            <a class="Button" href="${pageContext.request.contextPath}/order/new">Proceed to Checkout</a>
+            <a class="Button" href="${pageContext.request.contextPath}/quiz">Proceed to Checkout</a>
         </c:if>
     </div>
 

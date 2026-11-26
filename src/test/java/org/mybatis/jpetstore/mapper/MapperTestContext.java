@@ -52,7 +52,8 @@ public class MapperTestContext {
         postgres.getPassword());
     ResourceDatabasePopulator populator = new ResourceDatabasePopulator(
         new ClassPathResource("database/01-jpetstore-schema.sql"),
-        new ClassPathResource("database/02-jpetstore-dataload.sql"));
+        new ClassPathResource("database/02-jpetstore-dataload.sql"),
+        new ClassPathResource("database/03-quiz-dataload.sql"));
     populator.setSqlScriptEncoding("UTF-8");
     populator.execute(dataSource);
     return dataSource;
