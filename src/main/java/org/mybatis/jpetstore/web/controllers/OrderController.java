@@ -106,6 +106,10 @@ public class OrderController {
           "You must sign on before attempting to check out. Please sign on and try checking out again.");
       return "redirect:/account";
     }
+    // Checkout opens only after the pre-purchase quiz for the animals in the cart is passed
+    if (!QuizController.isPassed(session)) {
+      return "redirect:/quiz";
+    }
     if (cart != null) {
       Order order = new Order();
       order.initOrder(accountSession.getAccount(), cart);
@@ -147,6 +151,7 @@ public class OrderController {
       if (sessionOrder != null) {
         orderService.insertOrder(sessionOrder);
         session.setAttribute("cart", new Cart());
+        session.removeAttribute(QuizController.QUIZ_SESSION);
         model.addAttribute("message", "Thank you, your order has been submitted.");
         model.addAttribute("order", sessionOrder);
         return VIEW_ORDER_VIEW;
