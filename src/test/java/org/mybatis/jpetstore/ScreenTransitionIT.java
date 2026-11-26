@@ -127,6 +127,15 @@ class ScreenTransitionIT {
     $(By.linkText("Proceed to Checkout")).click();
     assertThat(title()).isEqualTo("JPetStore Demo");
 
+    // Pre-purchase quiz: keep choosing until each question is solved (wrong choices get disabled)
+    $(By.cssSelector("#Quiz h2")).shouldBe(text("구매 전 퀴즈"));
+    for (int i = 1; i <= 3; i++) {
+      while (!$(By.cssSelector("#q" + i + " .QuizExplanation")).exists()) {
+        $$(By.cssSelector("#q" + i + " button.QuizChoice:enabled")).first().click();
+      }
+    }
+    $(By.linkText("결제 계속하기")).click();
+
     // Changing shipping address
     $(By.name("shippingAddressRequired")).click();
     $(By.name("newOrder")).click();
